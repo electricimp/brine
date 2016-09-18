@@ -19,5 +19,5 @@
 %% -------------------------------------------------------------------
 
 -record(brine_keypair, {handle :: brine:handle(),
-                        private_key :: brine:public_key(),
-                        public_key :: brine:private_key()}).
+                        private_key :: brine:private_key(),
+                        public_key :: brine:public_key()}).
