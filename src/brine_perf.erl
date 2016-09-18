@@ -80,7 +80,7 @@ keygen(Owner, X) ->
     keygen(Owner, X - 1).
 
 signature(Owner, X) ->
-    random:seed(erlang:now()),
+    seed_random(),
     {ok, KeyPair} = brine:new_keypair(),
     Msg = list_to_binary([random:uniform(255) || _ <- lists:seq(1, ?MSG_SIZE)]),
     signature(Owner, Msg, KeyPair, X).
@@ -103,3 +103,8 @@ serialize(Owner, KeyPair, X) ->
     {ok, Blob} = brine:keypair_to_binary(KeyPair),
     {ok, KeyPair} = brine:binary_to_keypair(Blob),
     serialize(Owner, KeyPair, X - 1).
+
+seed_random() ->
+    random:seed(erlang:phash2([node()]),
+                erlang:monotonic_time(),
+                erlang:unique_integer()).
