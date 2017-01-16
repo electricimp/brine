@@ -55,7 +55,7 @@ serialize() ->
     io:format("Roundtrips per sec: ~p~n", [erlang:round((ChildIter * ?CHILDREN) / Secs)]),
     io:format("Note: 1 roundtrip converts a key pair to a binary blob and back to an Erlang record~n").
 
-    
+
 %% Internal functions
 join_children(0) ->
     ok;
@@ -82,7 +82,7 @@ keygen(Owner, X) ->
 signature(Owner, X) ->
     seed_random(),
     {ok, KeyPair} = brine:new_keypair(),
-    Msg = list_to_binary([random:uniform(255) || _ <- lists:seq(1, ?MSG_SIZE)]),
+    Msg = list_to_binary([rand:uniform(255) || _ <- lists:seq(1, ?MSG_SIZE)]),
     signature(Owner, Msg, KeyPair, X).
 
 signature(Owner, _Msg, _KeyPair, 0) ->
@@ -105,6 +105,5 @@ serialize(Owner, KeyPair, X) ->
     serialize(Owner, KeyPair, X - 1).
 
 seed_random() ->
-    random:seed(erlang:phash2([node()]),
-                erlang:monotonic_time(),
-                erlang:unique_integer()).
+    <<I1:32/unsigned-integer, I2:32/unsigned-integer, I3:32/unsigned-integer>> = crypto:strong_rand_bytes(12),
+    rand:seed(exsplus, {I1, I2, I3}).
