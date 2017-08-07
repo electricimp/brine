@@ -20,10 +20,9 @@
 
 -module(brine_nif).
 
--on_load(init/0).
+-on_load(init_brine_nif/0).
 
--export([init/0,
-         generate_keypair/2,
+-export([generate_keypair/2,
          generate_keypair_from_seed/3,
          sign_message/4,
          verify_signature/5,
@@ -32,7 +31,7 @@
 
 -define(nif_error, erlang:nif_error(not_loaded)).
 
-init() ->
+init_brine_nif() ->
     Workers = erlang:max(1, erlang:round(get_worker_count() * 0.5)),
     case build_nif_path() of
         {ok, Path} ->
