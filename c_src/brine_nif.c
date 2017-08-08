@@ -394,7 +394,7 @@ NIF(bnif_to_keypair) {
 
    Returns 0 on success; 1 if problems were encountered.
  */
-int on_load(ErlNifEnv* env, void** priv_data, ERL_NIF_TERM load_info) {
+static int on_load(ErlNifEnv* env, void** priv_data, ERL_NIF_TERM load_info) {
   brine_memory_cb_s memory_cb = {.malloc = enif_alloc, .free = enif_free};
   brine_init(&memory_cb);
   if (enif_get_int(env, load_info, &workers) &&
@@ -415,7 +415,7 @@ int on_load(ErlNifEnv* env, void** priv_data, ERL_NIF_TERM load_info) {
   return 1;
 }
 
-void on_unload(ErlNifEnv* env, void* priv_data) {
+static void on_unload(ErlNifEnv* env, void* priv_data) {
   for (int i = 0; i < workers; i++) {
     brine_task_s *task = brine_task_stop();
     brine_queue_enqueue(queue, task);
@@ -434,7 +434,7 @@ void on_unload(ErlNifEnv* env, void* priv_data) {
    non-zero (See http://www.erlang.org/doc/man/erl_nif.html).  As
    such, this is pretty much a dummy function.
  */
-int on_upgrade(ErlNifEnv* env, void** priv_data, void** old_priv_data, ERL_NIF_TERM load_info){
+static int on_upgrade(ErlNifEnv* env, void** priv_data, void** old_priv_data, ERL_NIF_TERM load_info){
   return 0;
 }
 
