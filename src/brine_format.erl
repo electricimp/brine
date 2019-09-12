@@ -20,7 +20,6 @@
 
 -module(brine_format).
 
--compile([native, {hipe, [o3]}]).
 -compile({inline, [hex/1]}).
 
 -define(H(X), (hex(X)):16).
